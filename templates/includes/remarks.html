@@ -1,0 +1,86 @@
+<ul class="list-group list-group-flush">
+  {% for item in check_item.remark.all %}
+    <li class="list-group-item">
+      <h6 class="mt-0">
+        Замечание № {{ forloop.counter }}
+      </h6>
+      {{ item.section }}
+      {% if item.page_number %}
+        - страница {{ item.page_number }}
+      {% endif %}
+
+      {% if item.paragraph %}
+        - абзац {{ item.paragraph }}
+      {% endif %}
+      <br>
+      Описание: <span id="item-text">{{ item.text }}</span><br>
+      {% if item.check_all %}
+        <span class="text-danger"><b>Проверить по всей работе</b><br></span>
+      {% endif %}
+
+      {% if user.allow_manage %}
+        <a class="btn btn-secondary btn-sm mt-1" href="{% url 'verify:delete_remark' username check_item.id item.id %}" role="button">
+          Удалить
+        </a>
+        <a class="btn btn-danger btn-sm mt-1" href="{% url 'verify:edit_remark' username check_item.id item.id %}" role="button">
+          Редактировать
+        </a>
+      {% else %}
+        <a class="btn btn-danger btn-sm mt-1" href="#" onclick="openPDF('{{ item.text }}')" role="button">
+          Справка по ошибке
+        </a>
+      {% endif %}
+
+      <br>
+      <small class="text-muted">{{ item.check_date }}</small>
+    </li>
+  {% endfor %}
+</ul>
+
+
+<script>
+function openPDF(itemText) {
+  const associativeContainer = {
+    	"Неверно указана тема пояснительной записки.": "14", 
+	"Неверно указан шифр пояснительной записки.": "14",
+	"Факультет, кафедра или профиль указаны неверно.": "1",
+	"Год написания пояснительной записки указан неверно.": "1",
+	"Неверно указан номер или дата приказа.": "45", 
+	"Неверно указаны исходные данные пояснительной записки.": "10", 
+	"Неверно указано число листов в штампе структурного элемента.": "14", 
+	"Закладка не определена.": "1", 
+	"Некорректное форматирование текста.": "10", 
+	"Орфографическая ошибка.": "16", 
+	"Межстрочный интервал задан неверно.": "14", 
+	"Абзацный отступ задан неверно.": "14", 
+	"Заголовок расположен неверно.": "15", 
+	"В заголовке используется неверный размер шрифта.": "15", 
+	"Заголовок не соответствует содержанию.": "15", 
+	"Список оформлен неверно.": "9",
+	 "Таблица расположена неверно.": "22", 
+	"Название таблицы расположено неверно.": "22", 
+	"Номер таблицы указан неверно.": "22", 
+	"Отсутствует ссылка на таблицу по тексту.": "22", 
+	"Рисунок расположен неверно.": "20",
+	 "Подрисуночная надпись расположена неверно.": "20", 
+	"Некорректный номер рисунка.": "20", 
+	"Отсутствует ссылка на рисунок по тексту.": "20", 
+	"Формула расположена неверно.": "18", 
+	"Номер формулы расположен неверно.": "3", 
+	"Отсутствует ссылка на формулу по тексту.": "3", 
+	"Не выдержан интервал от текста до рамки.": "3",
+	"Неверно указано число листов в основной рамке.": "3", 
+	"Отсутствуют ссылки на использованные источники.": "3", 
+	"Ссылки на источники оформлены неверно.": "3"
+  };
+
+  if (itemText in associativeContainer) {
+    const pdfPage = associativeContainer[itemText];
+    const pdfUrl = '/media/VKR.pdf#page=' + pdfPage;
+    window.open(pdfUrl, '_blank');
+  } else {
+    console.log("Ключ не найден");
+  }
+}
+</script>
+

@@ -1,0 +1,83 @@
+<div class="card mb-3 mt-1 shadow-sm">
+  <div class="card-header"><strong>Отправлено на проверку:</strong> {{ check_item.check_date }}</div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>Группа:</strong> <a class="link-danger" href="{% url 'verify:group_students' check_item.student.group.slug %}">{{ check_item.student.group }}</a>
+    </li>
+    <li class="list-group-item">
+      <strong>ФИО:</strong> <a class="link-danger" href="#">{{ check_item.student.first_name }} {{ check_item.student.last_name }}</a>
+    </li>
+    {% if check_item.docx_file and check_item.pdf_file %}
+    <li class="list-group-item">
+      <strong>Диплом:</strong> <a class="link-danger" href="{{ check_item.docx_file.url }}">скачать docx</a>, <a class="link-danger" href="{{ check_item.pdf_file.url }}">скачать pdf</a>
+    </li>
+    {% endif %}
+    <li class="list-group-item">
+      <strong>Сопроводительная информация:</strong> {{ check_item.info }}
+    </li>
+    <li class="list-group-item">
+      <strong>Статус: </strong>
+      {% if not check_item.status %}
+      Работа ожидает проверки
+      {% else %}
+      Работа проверена
+      {% if check_item.remark.exists %}
+      - требуется исправить замечания
+      {% else %}
+      - замечаний нет
+      {% endif %}
+      {% endif %}
+    </li>
+
+    <li class="list-group-item">
+      {% if check_item.remark.exists %}
+      <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ check_item.id }}">
+        Показать замечания ({{ check_item.remark.count}})
+      </button>
+      {% endif %}
+      {% if not check_item.status %}
+      {% if user.allow_manage  %}
+      <a class="btn btn-outline-dark" href="{% url 'verify:check_view' user.username check_item.id %}" role="button">
+        Проверить работу
+      </a>
+      <a class="btn btn-outline-secondary" href="{% url 'verify:check_archive' user.username check_item.id %}" role="button">
+        В архив
+      </a>
+      {% else %}
+      <a class="btn btn-outline-dark" href="{% url 'verify:check_delete' user.username check_item.id %}" role="button">
+        Отменить проверку
+      </a>
+      {% endif %}
+      {% else %}
+      {% if user.allow_manage  %}
+      <a class="btn btn-outline-dark" href="{% url 'verify:check_view' user.username check_item.id %}" role="button">
+        Подробнее
+      </a>
+      <a class="btn btn-outline-success" href="{% url 'verify:check_active' user.username check_item.id %}" role="button">
+        Вернуть в работу
+      </a>
+      <a class="btn btn-outline-secondary" href="{% url 'verify:check_delete' user.username check_item.id %}" role="button">
+        Удалить
+      </a>
+      {% endif %}
+      {% endif %}
+    </li>
+  </ul>
+</div>
+
+<div class="modal fade" id="exampleModal{{ check_item.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Замечания по работе - {{ check_item.student.get_full_name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% include "includes/remarks.html" %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>

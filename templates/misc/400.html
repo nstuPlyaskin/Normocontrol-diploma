@@ -1,0 +1,15 @@
+{% extends "verify/base.html" %}
+{% block title %} Ошибка 400 {% endblock %}
+{% block content %}
+
+<main role="main" class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Ошибка 400</h1>
+      <p class="lead">Неверный запрос к странице <code>{{ path }}</code></p>
+      <p class="lead"><a href="{% url 'verify:index' %}">Вернуться на главную</a></p>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

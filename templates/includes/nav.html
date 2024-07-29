@@ -1,0 +1,79 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark pt-3 pb-3">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-start">
+      <a href="{% url 'verify:index' %}" class="text-decoration-none">
+        <span class="badge bg-danger p-2 fs-3">Normo</span>
+        <span class="navbar-brand fs-3">control</span>
+      </a>
+    </div>
+    <div class="d-flex justify-content-between">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'verify:index' %}">Главная</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'verify:check_list' user.username %}">Проверки</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'verify:archive' user.username %}">Архив</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="d-flex justify-content-end">
+      {% if user.is_authenticated %}
+      {% if user.allow_manage %}
+      <a type="button" class="btn btn-danger m-2" style="width: 35px; height: 35px;" href="{% url 'verify:check_list' user.username %}">
+        {{ check_count }}
+        <span class="visually-hidden">Активные заявки на проверку</span>
+      </a>
+      {% endif %}
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% load thumbnail %}
+              {% thumbnail user.image "200x200" crop="center"  as im %}
+              <img class="card-img" src="{{ im.url }}" style="width: 35px;" />
+              {% endthumbnail %}
+              {{ request.user }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              {% if user.allow_manage %}
+              <li><a class="dropdown-item" href="{% url 'verify:check_list' user.username %}">Работы на проверке</a></li>
+              <li><a class="dropdown-item" href="{% url 'verify:archive' user.username %}">Архив</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="{% url 'verify:group_list' %}">Группы</a></li>
+              <li><a class="dropdown-item" href="{% url 'verify:student_list' %}">Студенты</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="{% url 'verify:new_group' %}">Добавить группу</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% else %}
+              <li><a class="dropdown-item" href="{% url 'verify:new_check' user.username %}">Отправить на проверку</a></li>
+              <li><a class="dropdown-item" href="{% url 'verify:check_list' user.username %}">Мои проверки</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% endif %}
+              <li><a class="dropdown-item" href="{% url 'password_change' %}">Изменить пароль</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Войти</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Регистрация</a></li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>

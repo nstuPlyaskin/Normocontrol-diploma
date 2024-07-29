@@ -1,0 +1,21 @@
+{% extends "verify/base.html" %}
+{% block title %}Список студенческих групп{% endblock %}
+{% block header %}Cписок студенческих групп{% endblock %}
+{% block description %}{% endblock %}
+{% block content %}
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Название</th>
+      <th scope="col">Кол-во студентов</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for group in group_list %}
+    {% include "includes/group_item.html" with group=group %}
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

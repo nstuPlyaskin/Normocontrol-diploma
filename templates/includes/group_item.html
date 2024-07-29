@@ -1,0 +1,5 @@
+<tr>
+  <th scope="row">{{ forloop.counter }}</th>
+  <td><a href="{% url 'verify:group_students' group.slug %}" class="link-light">{{ group }}</a></td>
+  <td>{{ group.user.count }}</td>
+</tr>

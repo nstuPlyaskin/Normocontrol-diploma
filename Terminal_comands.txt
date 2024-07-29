@@ -1,0 +1,57 @@
+python --version # Установленная версия Python
+
+[Виртуальное окружение]
+python -m venv venv # Установка виртуального окружения для проекта
+source venv/Scripts/activate # Запуск виртуального окружения проекта
+
+[Установка]
+pip install Django==2.2 # Установка Django версии 2.2
+django-admin startproject [project name] # Создание нового проекта
+python manage.py startapp [app name] # Создать новое приложение
+python manage.py --help # Справка
+
+[Запуск сервера]
+python manage.py runserver # Запустить проект
+http://127.0.0.1:8000/ # Адрес сервера
+Ctrl + C # Закрыть сервер
+
+[Тестирование]
+python manage.py test # Запуск всех тестов. Опционально аргумент -v 2 или -v 3
+coverage run --source='verify,users' manage.py test -v 2 # Оценка покрытия тестами
+coverage report # Проверка отчета покрытия тестами
+python manage.py test verify # Запустит только тесты в приложении
+python manage.py test verify.tests.test_urls
+python manage.py test verify.tests.test_urls.StaticURLTests
+python manage.py test verify.tests.test_urls.StaticURLTests.test_homepage
+
+[Миграции]
+python manage.py makemigrations # Запускаем скрипт миграции
+python manage.py migrate # Сохраняем миграции
+python manage.py show migrations # показать статус миграций
+python manage.py sqlmigrate posts 0001_initial # показать SQL-код миграции
+python manage.py migrate posts 0001_initial # миграция для определенной модели
+
+[Суперпользователь]
+python manage.py createsuperuser # Создание суперпользователя
+python manage.py collectstatic # Сбор статических файлов в заданную директорию
+
+[Зависимости]
+pip freeze > requirements.txt # Создание файла с зависимостями для готового проекта
+pip install -r requirements.txt # Установка всех зависимостей проекта
+
+[Консоль]
+$ python manage.py shell # открыть интерактиувную консоль для экспериментов
+
+[PEP8]
+isort . # Сортирует импорты согласно PEP8
+
+[MAIL SETTINGS]
+1.go to gmail profile -> myaccount.google.com/u/1/apppasswords
+field app name like maill_test and copy generated password
+
+2. go to file Normocontrol-main/normocontrol/settings/base.py
+edit email and password to ur email and password:
+	EMAIL_HOST_USER = 'ENTER UR EMAIL HERE'           
+	EMAIL_HOST_PASSWORD = 'ENTER UR PASSWORD HERE'
+	
+3. u must change email in Normocontrol-main/verify/views/ (email marked by comments)

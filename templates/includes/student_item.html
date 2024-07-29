@@ -1,0 +1,16 @@
+<tr>
+  <th scope="row">{{ forloop.counter }}</th>
+  <td>{{ student.get_full_name }}</td>
+  <td>{{ student.email }}</td>
+  <td>{{ student.username }}</td>
+  <td>{{ student.group }}</td>
+  <td>
+    {% if student.checkout_student.last.status == False %}
+    <a href="{% url 'verify:student_active_check' student.username %}" class="link-light">
+      Проверить
+    </a>
+    {% else %}
+    Отсутствует
+    {% endif %}
+  </td>
+</tr>

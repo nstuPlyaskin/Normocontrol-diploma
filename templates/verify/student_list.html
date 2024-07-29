@@ -1,0 +1,23 @@
+{% extends "verify/base.html" %}
+{% block title %}Список студентов {{ group }}{% endblock %}
+{% block header %}Список студентов {{ group }}{% endblock %}
+{% block description %}{% endblock %}
+{% block content %}
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">ФИО</th>
+      <th scope="col">e-mail</th>
+      <th scope="col">Ник</th>
+      <th scope="col">Группа</th>
+      <th scope="col">Работа</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    {% include "includes/student_item.html" with student=student %}
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

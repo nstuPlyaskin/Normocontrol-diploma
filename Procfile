@@ -1,0 +1,1 @@
+web: gunicorn normocontrol.wsgi --log-file -
